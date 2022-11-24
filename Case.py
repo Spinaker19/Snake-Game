@@ -16,6 +16,12 @@ class Case():
     def get_coord(self):
         return self.__coord
 
+    def set_is_fruit(self, bool):
+        self.__is_fruit = bool
+
+    def is_fruit(self):
+        return self.__is_fruit
+
     def __str__(self) -> str:
         return '({}; {})'.format(self.__coord[0], self.__coord[1])
     
