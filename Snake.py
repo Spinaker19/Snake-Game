@@ -35,6 +35,8 @@ class Snake():
         self.draw(screen)
 
         #remove the last case of the snake -> avance
-        self.__snake_cases[-1].draw(screen)
-        self.__snake_cases.remove(self.__snake_cases[-1])
+        print(self.__cases[index_x][index_y].is_fruit())
+        if(not self.__cases[index_x][index_y].is_fruit()):
+            self.__snake_cases[-1].draw(screen)
+            self.__snake_cases.remove(self.__snake_cases[-1])
         

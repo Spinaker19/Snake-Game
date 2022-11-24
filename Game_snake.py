@@ -4,6 +4,7 @@ from pygame_gui.elements import UIButton, UILabel
 import sys
 from Snake import Snake
 from Case import Case
+import random
 
 class Game():
 
@@ -31,6 +32,16 @@ class Game():
     def draw(self):
         self.__snake.move(self.__screen)
 
+    def draw_fruit(self):
+        while True:
+            index_x = random.randrange(0, len(self.__cases[0]))
+            index_y = random.randrange(0, len(self.__cases))
+            if not self.__cases[index_x][index_y].is_fruit():
+                self.__cases[index_x][index_y].draw(self.__screen, (0,0,255))
+                self.__cases[index_x][index_y].set_is_fruit(True)
+                break
+        return 0
+
     def run(self):
         for i in range(int(self.__size[0]/self.__case_size)):
             row = []
@@ -48,6 +59,9 @@ class Game():
 
         self.__snake.draw(self.__screen)
 
+        #Launch spawn of fruit
+        i = 0
+
         clock = pygame.time.Clock()
         while True:
             
@@ -61,9 +75,11 @@ class Game():
                 self.process_events(event)
                 self.__manager.process_events(event)
             
+            if i == 15: i = self.draw_fruit()
+            i+=1
             self.__manager.update(time_delta/1000)
             self.draw()
             self.__manager.draw_ui(self.__screen)
             pygame.display.flip()
 
-Game().run()  
+Game().run()
