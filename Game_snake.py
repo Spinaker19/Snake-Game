@@ -16,6 +16,7 @@ class Game():
         self.__manager = pygame_gui.UIManager(self.__size)
         self.__cases = []
         self.__snake = None
+        self.__score = 0
 
     def process_events(self, event):
         if event.type == pygame.KEYDOWN:
@@ -28,15 +29,12 @@ class Game():
                 self.__snake.set_direction((0,-1))
             elif event.key == pygame.K_DOWN and self.__snake.get_direction()[1] != -1:
                 self.__snake.set_direction((0,1))
-    
-    def draw(self):
-        self.__snake.move(self.__screen)
 
     def draw_fruit(self):
         while True:
-            index_x = random.randrange(0, len(self.__cases[0]))
-            index_y = random.randrange(0, len(self.__cases))
-            if not self.__cases[index_x][index_y].is_fruit():
+            index_x = random.randrange(0, len(self.__cases))
+            index_y = random.randrange(0, len(self.__cases[0]))
+            if not self.__cases[index_x][index_y].is_fruit() or not self.__cases[index_x][index_y].is_snake():
                 self.__cases[index_x][index_y].draw(self.__screen, (0,0,255))
                 self.__cases[index_x][index_y].set_is_fruit(True)
                 break
@@ -52,15 +50,16 @@ class Game():
             self.__cases.append(row)
         
         #Drawing the snake
+        self.__snake = Snake(self, (0,-1),self.__cases)
         head = self.__cases[int(self.__size[0]/(2*self.__case_size))][int(self.__size[1]/(2*self.__case_size))]
-        self.__snake = Snake((0,-1), [head], self.__cases)
+        self.__snake.add(head)
         self.__snake.add(self.__cases[head.get_coord()[0]][head.get_coord()[1]+1])
         self.__snake.add(self.__cases[head.get_coord()[0]][head.get_coord()[1]+2])
 
         self.__snake.draw(self.__screen)
 
         #Launch spawn of fruit
-        i = 0
+        spawn_fruit = 0
 
         clock = pygame.time.Clock()
         while True:
@@ -75,11 +74,23 @@ class Game():
                 self.process_events(event)
                 self.__manager.process_events(event)
             
-            if i == 15: i = self.draw_fruit()
-            i+=1
+            if spawn_fruit == 15: spawn_fruit = self.draw_fruit()
+
+            spawn_fruit+=1
             self.__manager.update(time_delta/1000)
-            self.draw()
+            if not self.__snake.move(self.__screen) : break
             self.__manager.draw_ui(self.__screen)
             pygame.display.flip()
+
+    def increment_score(self):
+        self.__score += 1
+
+    def game_over(self):
+        print('Game over')
+        print('Your score is {}'.format(self.__score))
+        sys.exit()
+        #Make a variable 'state' that determine what the while loop will display
+        # -> in Game display the game
+        # -> Game over display the end screen
 
 Game().run()

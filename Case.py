@@ -7,6 +7,7 @@ class Case():
         self.__color = color
         self.__coord_pixels = coord_pixels
         self.__coord = coord
+        self.__is_snake = False
         self.__is_fruit = False
         self.__is_spoiled = False
 
@@ -22,8 +23,20 @@ class Case():
     def is_fruit(self):
         return self.__is_fruit
 
+    def set_is_spoiled(self, bool):
+        self.__is_spoiled = bool
+
+    def is_spoiled(self):
+        return self.__is_spoiled
+    
+    def is_snake(self):
+        return self.__is_snake
+
+    def set_is_snake(self,bool):
+        self.__is_snake = bool
+
     def __str__(self) -> str:
-        return '({}; {})'.format(self.__coord[0], self.__coord[1])
+        return '({}, {})'.format(self.__coord[0], self.__coord[1])
     
     #Print les infos quand l'objet est dans une liste
     #Peut être enlever à la fin du projet -> pratique pour dev
