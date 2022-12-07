@@ -34,9 +34,7 @@ class Snake():
         index_y = (self.__snake_cases[0].get_coord()[1]+self.__direction[1])%len(self.__cases[0])
 
         #Detect snake eating itself
-        if self.__cases[index_x][index_y].is_snake():
-            self.__game.game_over()
-            return False
+        if self.__cases[index_x][index_y].is_snake(): return False
 
         #add the new case a the begining of the list
         self.__snake_cases.insert(0, self.__cases[index_x][index_y])
